@@ -48,6 +48,7 @@ namespace SanayiCebimdeBackend.Application.Services
                 PasswordHash = password 
             };
 
+                //git test
             _context.Users.Add(user);
             _context.SaveChanges();
             return Task.FromResult(new UserDto
