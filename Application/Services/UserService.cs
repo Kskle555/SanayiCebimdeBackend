@@ -33,6 +33,8 @@ namespace SanayiCebimdeBackend.Application.Services
             }
         }
 
+
+
         public Task<UserDto> RegisterAsync(UserDto userDto, string password)
         {
             try
@@ -40,8 +42,15 @@ namespace SanayiCebimdeBackend.Application.Services
 
             // kayit olma islemi
 
- 
-            var user = new Domain.Entities.User
+                var kontrol = _context.Users.Any(u => u.Username == userDto.Username || u.Email == userDto.Email);
+
+                if (kontrol)
+                {
+                    return Task.FromException<UserDto>(new Exception("Username or Email already exists."));
+                }
+
+
+                    var user = new Domain.Entities.User
             {
                 Username = userDto.Username,
                 Email = userDto.Email,
@@ -61,6 +70,7 @@ namespace SanayiCebimdeBackend.Application.Services
             catch(Exception Ex)
             {
                 return Task.FromException<UserDto>(Ex);
+
             }
 
         }
