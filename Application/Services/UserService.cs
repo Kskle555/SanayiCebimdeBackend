@@ -18,10 +18,21 @@ namespace SanayiCebimdeBackend.Application.Services
         public async Task<UserDto?> AuthenticateAsync(string username, string password)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == password);
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
+            {
                 return null;
+            }
+            
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+            if(!isPasswordValid)
+            {
+                return null; // Password is incorrect
+            }
+
+
             else
             {
                 return new UserDto
@@ -50,12 +61,16 @@ namespace SanayiCebimdeBackend.Application.Services
                 }
 
 
-                    var user = new Domain.Entities.User
-            {
-                Username = userDto.Username,
-                Email = userDto.Email,
-                PasswordHash = password 
-            };
+                 var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+                
+
+
+                var user = new Domain.Entities.User
+                    {
+                        Username = userDto.Username,
+                        Email = userDto.Email,
+                        PasswordHash = passwordHash
+                };
 
                 //git test
             _context.Users.Add(user);
