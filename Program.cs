@@ -47,6 +47,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//canlida swagger ui gözükmesi için aþaðýdaki satýrlarý açabiliriz sonra
+//app.UseSwagger();
+//app.UseSwaggerUI(c =>
+//{
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//});
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseCors("AllowLocalhost3000");
