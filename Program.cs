@@ -1,26 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SanayiCebimdeBackend.Application.Interfaces;
-using SanayiCebimdeBackend.Application.Services; // Add this if needed
+using SanayiCebimdeBackend.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+// Güvenli CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost3000", policy =>
+    options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+                "https://sanayicebimde.net",
+                "https://www.sanayicebimde.net",
+                "http://localhost:3000" // Development için
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // Authentication için gerekli
     });
 });
+
 builder.Services.AddDbContext<SanayiCebimdeBackend.Infrastructure.Data.AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -33,31 +37,20 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
-
-
-
-// Register services
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-//canlida swagger ui gözükmesi için aþaðýdaki satýrlarý açabiliriz sonra
-//app.UseSwagger();
-//app.UseSwaggerUI(c =>
-//{
-//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-//});
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseCors("AllowLocalhost3000");
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
