@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -70,6 +71,20 @@ namespace SanayiCebimdeBackend.API.Controllers
             if (user == null)
                 return BadRequest("User registration failed");
 
+            return Ok(user);
+        }
+
+
+        [HttpGet("profile")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task <IActionResult> GetUserProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+            var user = await _userService.GetByIdAsync(Convert.ToInt32(userId));
+            if (user == null)
+                return NotFound();
             return Ok(user);
         }
     }

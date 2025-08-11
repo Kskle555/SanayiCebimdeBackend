@@ -39,6 +39,14 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin", "Administrator"));
+    options.AddPolicy("ManagerOnly", policy => policy.RequireRole("Manager", "Admin"));
+    options.AddPolicy("TechnicianOnly", policy => policy.RequireRole("Technician", "Tech", "Admin"));
+});
+
+
 var app = builder.Build();
 
 app.UseSwagger();
