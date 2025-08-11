@@ -364,3 +364,4 @@ FodyWeavers.xsd
 # App settings dosyalarýný ignore et
 appsettings.json
 appsettings.*.json
+# App settings dosyalarýný ignore et
