@@ -1,0 +1,11 @@
+﻿namespace SanayiCebimdeBackend.Domain.Entities
+{
+    public class Skill
+    {
+        public int Id { get; set; }
+        public int UstaId { get; set; }
+        public Usta Usta { get; set; }
+        public string Name { get; set; }
+    }
+}
+}
