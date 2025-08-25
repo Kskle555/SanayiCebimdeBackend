@@ -45,6 +45,7 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUstalarService, UstalarService>();
 
 builder.Services.AddAuthorization(options =>
 {

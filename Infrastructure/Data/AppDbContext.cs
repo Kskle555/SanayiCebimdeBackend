@@ -9,7 +9,7 @@ namespace SanayiCebimdeBackend.Infrastructure.Data
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Galeri> Galeris => Set<Galeri>();
-        public DbSet<Usta> Ustas => Set<Usta>();
+        public DbSet<Ustalar> Ustalar => Set<Ustalar>();
         public DbSet<Yorum> Yorums => Set<Yorum>();
         public DbSet<Skill> Skills => Set<Skill>();
 
