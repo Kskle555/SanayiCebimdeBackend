@@ -58,6 +58,10 @@ namespace SanayiCebimdeBackend.API.Controllers
         [HttpPost("register")]
        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
+            try
+            {
+
+           
             var userdto = new UserDto
             {
                 Email = request.Email,
@@ -72,6 +76,12 @@ namespace SanayiCebimdeBackend.API.Controllers
                 return BadRequest("User registration failed");
 
             return Ok(user);
+            }
+            catch(Exception Ex)
+            {
+                Console.WriteLine("hata", Ex.Message);
+                return BadRequest(Ex.Message);
+            }
         }
 
 
