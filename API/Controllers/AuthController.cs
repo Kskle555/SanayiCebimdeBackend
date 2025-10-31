@@ -68,9 +68,9 @@ namespace SanayiCebimdeBackend.API.Controllers
                 Username = request.Username,
             };
 
-            //register
+                //register user 
 
-            var user = await _userService.RegisterAsync(userdto, request.Password);
+                var user = await _userService.RegisterAsync(userdto, request.Password);
 
             if (user == null)
                 return BadRequest("User registration failed");
