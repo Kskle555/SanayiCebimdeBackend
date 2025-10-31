@@ -85,6 +85,7 @@ namespace SanayiCebimdeBackend.API.Controllers
         }
 
 
+
         [HttpGet("profile")]
         [Authorize(Roles = "User,Admin")]
         public async Task <IActionResult> GetUserProfile()
