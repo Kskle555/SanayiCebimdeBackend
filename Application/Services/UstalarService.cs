@@ -21,7 +21,9 @@ namespace SanayiCebimdeBackend.Application.Services
             try
             {
                 // 1. Sorguyu hazırla
-                var query = _context.Ustalar.AsNoTracking();
+                var query = _context.Ustalar
+                            .AsNoTracking()
+                            .OrderByDescending(x => x.Id);
 
                 // 2. Toplam sayıyı al (Veritabanında çalışır)
                 var totalCount = await query.CountAsync();
@@ -53,7 +55,8 @@ namespace SanayiCebimdeBackend.Application.Services
                     Yorumlar = u.Yorumlar,
                     Galeri = u.Galeri,
                     Skills = u.Skills
-                }).ToList();
+                })
+                .ToList();
 
                 return (mappedItems, totalCount);
             }
