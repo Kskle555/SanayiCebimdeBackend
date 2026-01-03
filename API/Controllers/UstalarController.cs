@@ -21,12 +21,12 @@ namespace SanayiCebimdeBackend.API.Controllers
 
         [HttpGet("ustalar")]
         //[Authorize(Roles = "User,Admin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
             try
             {
-                var ustalar = _ustaService.GetAllUstalarAsync().Result;
-                return Ok(ustalar);
+                var (items, totalCount) = await _ustaService.GetPagedUstalarsAsync(page, pageSize);
+                return Ok(new { items, totalCount, page, pageSize });
             }
             catch(Exception Ex)
             {
