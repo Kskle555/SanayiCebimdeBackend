@@ -20,45 +20,46 @@ namespace SanayiCebimdeBackend.Application.Services
         {
             try
             {
+                // 1. Sorguyu hazırla
                 var query = _context.Ustalar.AsNoTracking();
 
-                var ustalar = await _context.Ustalar
-                    .AsNoTracking()
-                    .ToListAsync();
-
+                // 2. Toplam sayıyı al (Veritabanında çalışır)
                 var totalCount = await query.CountAsync();
 
-                var items = await query
+                // 3. Sadece ilgili sayfadaki "Entity" listesini çek 
+                // Bu satır eski çalışan kodunla aynı mantıkta çalışır, sadece parça çeker.
+                var pagedEntities = await query
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(u => new UstaDto
-                    {
-                        Id = u.Id,
-                        Name = u.Name,
-                        Profession = u.Profession,
-                        Location = u.Location,
-                        Rating = u.Rating,
-                        Reviews = u.Reviews,
-                        Image = u.Image,
-                        Description = u.Description,
-                        MemberSince = u.MemberSince,
-                        TotalJobs = u.TotalJobs,
-                        SatisfactionRate = u.SatisfactionRate,
-                        Phone = u.Phone,
-                        Date = u.Date,
-                        ImageURL = u.ImageURL,
-                        Yorumlar = u.Yorumlar,
-                        Galeri = u.Galeri,
-                        Skills = u.Skills
-                    })
-         .ToListAsync();
+                    .ToListAsync();
 
-                return (items, totalCount);
+                // 4. Eşlemeyi (Mapping) RAM üzerinde yap (Hata almanı engeller)
+                var mappedItems = pagedEntities.Select(u => new UstaDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Profession = u.Profession,
+                    Location = u.Location,
+                    Rating = u.Rating,
+                    Reviews = u.Reviews,
+                    Image = u.Image,
+                    Description = u.Description,
+                    MemberSince = u.MemberSince,
+                    TotalJobs = u.TotalJobs,
+                    SatisfactionRate = u.SatisfactionRate,
+                    Phone = u.Phone,
+                    Date = u.Date,
+                    ImageURL = u.ImageURL,
+                    Yorumlar = u.Yorumlar,
+                    Galeri = u.Galeri,
+                    Skills = u.Skills
+                }).ToList();
+
+                return (mappedItems, totalCount);
             }
             catch (Exception ex)
             {
-                // Log the exception (you can use a logging framework here)
-                Console.WriteLine($"An error occurred while retrieving ustalar: {ex.Message}");
+                Console.WriteLine($"Hata oluştu: {ex.Message}");
                 return (new List<UstaDto>(), 0);
             }
         }

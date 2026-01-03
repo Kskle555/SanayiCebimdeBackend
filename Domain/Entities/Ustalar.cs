@@ -1,5 +1,8 @@
-﻿namespace SanayiCebimdeBackend.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SanayiCebimdeBackend.Domain.Entities
 {
+    [Table("Ustalar", Schema = "sanayice_35")]
     public class Ustalar
     {
         public int Id { get; set; }

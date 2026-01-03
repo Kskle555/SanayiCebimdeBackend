@@ -13,6 +13,13 @@ namespace SanayiCebimdeBackend.Infrastructure.Data
         public DbSet<Yorum> Yorums => Set<Yorum>();
         public DbSet<Skill> Skills => Set<Skill>();
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Yorum>().ToTable("Yorumlar");
+            modelBuilder.Entity<Galeri>().ToTable("Galeri");
+            modelBuilder.Entity<Ustalar>().ToTable("Ustalar");
+
+        }
     }
 }
